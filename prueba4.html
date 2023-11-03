@@ -1,24 +1,131 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>AR Marker with Arrow</title>
-    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <script src="https://cdn.rawgit.com/AR-js-org/AR.js/3.3.2/aframe/build/aframe-ar.js"></script>
+    <title>AR.js A-Frame Location-based</title>
+    <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+    <script type='text/javascript' src='https://raw.githack.com/AR-js-org/AR.js/master/three.js/build/ar-threex-location-only.js'></script>
+    <script type='text/javascript' src='https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js'></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    
+    <style>
+        .button {
+            background-color: #b57edc;
+            border: none;
+            color: white;
+            padding: 7px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 12px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 12px;
+            border: 2px solid #983adb;
+            box-shadow: black;
+        }
+
+        #menu-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        #menu {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            display: none;
+        }
+
+        .menu-option {
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        #overlay-container {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 10px;
+        }
+
+        #direction-arrow {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        #direction-arrow img {
+            width: 50px;
+            height: auto;
+        }
+
+        #map {
+            position: absolute;
+            bottom: 20px;
+            left: 10px;
+            width: 200px;
+            height: 200px;
+            cursor: crosshair;
+        }
+    </style>
 </head>
 <body>
-    <a-scene
-        vr-mode-ui="enabled: false"
-        embedded
-        arjs="sourceType: webcam; trackingMethod: best; debugUIEnabled: false;"
-    >
-        <!-- Flecha -->
-        <a-entity
-            gltf-model="#flechaModel" <!-- Debes cargar un modelo 3D de una flecha -->
-            scale="0.1 0.1 0.1"
-            position="0 0 -5" <!-- Posición inicial de la flecha -->
-            rotation="0 0 0"
-        ></a-entity>
-    </a-scene>
+<a-scene vr-mode-ui='enabled: false' arjs='sourceType: webcam; videoTexture: true; debugUIEnabled: false' renderer='antialias: true; alpha: true'>
+    <a-camera gps-new-camera='gpsMinDistance: 5'></a-camera>
+    <a-entity material='color: red' geometry='primitive: box' gps-new-entity-place="latitude: <6.337800>; longitude: <add-your-longitude>" scale="10 10 10"></a-entity>
+</a-scene>
+<div id="menu-button">☰</div>
+<div id="menu">
+    <div class="menu-option">Opción 1</div>
+    <div class="menu-option">Opción 2</div>
+    <div class="menu-option">Opción 3</div>
+    <div class="menu-option">Opción 4</div>
+    <div class="menu-option">Opción 5</div>
+</div>
+<div id="overlay-container">
+    <button class="button">Botón 1</button>
+    <button class="button">Botón 2</button>
+    <button class="button">Botón 3</button>
+</div>
+<div id="direction-arrow">
+    <img src="ruta-a-tu-imagen.png" alt="Flecha de dirección">
+</div>
+<div id="map"></div>
+
+<script>
+    const menuButton = document.getElementById('menu-button');
+    const menu = document.getElementById('menu');
+    const mapElement = document.getElementById('map');
+    const map = L.map(mapElement).setView([0, 0], 1);
+
+    menuButton.addEventListener('click', () => {
+        menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+    });
+
+    L.tileLayer('https://{s}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png').addTo(map);
+
+    // Obtener ubicación del teléfono
+    if ('geolocation' in navigator) {
+        navigator.geolocation.getCurrentPosition(position => {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+
+            map.setView([lat, lng], 15);
+
+            // Agregar un marcador en la ubicación actual
+            L.marker([lat, lng]).addTo(map)
+                .bindPopup('Ubicación actual').openPopup();
+        });
+    }
+</script>
 </body>
 </html>
