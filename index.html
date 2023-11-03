@@ -5,7 +5,7 @@
     <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
     <script type='text/javascript' src='https://raw.githack.com/AR-js-org/AR.js/master/three.js/build/ar-threex-location-only.js'></script>
     <script type='text/javascript' src='https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js'></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key="></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key="></script> <!-- Reemplaza 'TU_API_KEY' con tu clave de API de Google Maps -->
 
     <style>
         .button {
@@ -53,9 +53,8 @@
         #overlay-container {
             position: absolute;
             top: 0;
-            right: 100px;
+            right: 0;
             padding: 10px;
-            
         }
 
         #direction-arrow {
@@ -74,19 +73,22 @@
             position: absolute;
             bottom: 20px;
             left: 10px;
-            width: 150px;
-            height: 150px;
+            width: 200px;
+            height: 200px;
         }
 
         /* Estilos para la imagen superpuesta */
         #image-overlay {
             position: absolute;
-            top: 100px;
-            left: 50px;
+            top: 50%; /* Centra verticalmente */
+            left: 50%; /* Centra horizontalmente */
+            transform: translate(-50%, -50%); /* Centra absolutamente */
             border: 1px solid rgba(0, 0, 0, 0.5);
             background: rgba(255, 255, 255, 0.8);
             padding: 10px;
             display: none;
+            max-width: 80%; /* Ajusta el ancho máximo al 80% del contenedor */
+            max-height: 80vh; /* Ajusta la altura máxima al 80% de la altura visible */
         }
 
         #close-overlay-button {
@@ -118,7 +120,7 @@
     <div class="menu-option">Salir</div>
 </div>
 <div id="overlay-container">
-    <button class="button" onclick="mostrarImagen('formulario-contacto-error.webp')">Reportar error</button>
+    <button class="button" onclick="mostrarImagen('error.webp')">Reportar error</button>
     <button class="button" onclick="mostrarImagen('recomen.jpg')">Recomendado</button>
     <button class="button" onclick="mostrarImagen('promos.png')">Promociones</button>
 </div>
@@ -148,6 +150,7 @@
     }
 
     function cerrarImagen() {
+        overlayImg.src = '';
         imageOverlay.style.display = 'none';
     }
 
