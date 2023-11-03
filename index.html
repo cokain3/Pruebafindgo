@@ -7,7 +7,6 @@
     <script type='text/javascript' src='https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js'></script>
     <script src="https://maps.googleapis.com/maps/api/js?key="></script>
 
-
     <style>
         .button {
             background-color: #b57edc;
@@ -81,11 +80,26 @@
         /* Estilos para la imagen superpuesta */
         #image-overlay {
             position: absolute;
-            top: 100px; /* Ajusta la posición vertical de la imagen */
-            left: 50px; /* Ajusta la posición horizontal de la imagen */
-            border: 1px solid rgba(0, 0, 0, 0.5); /* Borde transparente */
-            background: rgba(255, 255, 255, 0.8); /* Fondo con transparencia */
+            top: 100px;
+            left: 50px;
+            border: 1px solid rgba(0, 0, 0, 0.5);
+            background: rgba(255, 255, 255, 0.8);
             padding: 10px;
+            display: none;
+        }
+
+        #close-overlay-button {
+            background-color: #b57edc;
+            border: none;
+            color: white;
+            padding: 7px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 12px;
+            margin-top: 10px;
+            cursor: pointer;
+            border-radius: 12px;
         }
     </style>
 </head>
@@ -103,16 +117,17 @@
     <div class="menu-option">Salir</div>
 </div>
 <div id="overlay-container">
+    <button class="button" onclick="mostrarImagen('formulario-contacto-error.webp')">Reportar error</button>
+    <button class="button" onclick="mostrarImagen('recomen.jpg')">Recomendado</button>
     <button class="button" onclick="mostrarImagen('promos.png')">Promociones</button>
-    <button class="button" onclick="mostrarImagen('')">Reportar un error</button>
-    <button class="button" onclick="ocultarImagen()">Ocultar Imagen</button>
 </div>
 <div id="direction-arrow">
     <img src="flecha.png" alt="Flecha de dirección">
 </div>
 <div id="map"></div>
-<div id="image-overlay" style="display: none;">
+<div id="image-overlay">
     <img id="overlay-img" src="" alt="Imagen Superpuesta">
+    <button id="close-overlay-button" onclick="cerrarImagen()">Cerrar</button>
 </div>
 
 <script>
@@ -120,6 +135,7 @@
     const menu = document.getElementById('menu');
     const imageOverlay = document.getElementById('image-overlay');
     const overlayImg = document.getElementById('overlay-img');
+    const closeOverlayButton = document.getElementById('close-overlay-button');
 
     menuButton.addEventListener('click', () => {
         menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
@@ -130,16 +146,12 @@
         imageOverlay.style.display = 'block';
     }
 
-    function ocultarImagen() {
+    function cerrarImagen() {
         imageOverlay.style.display = 'none';
     }
-</script>
-<script>
-    const menuButton = document.getElementById('menu-button');
-    const menu = document.getElementById('menu');
 
-    menuButton.addEventListener('click', () => {
-        menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+    closeOverlayButton.addEventListener('click', () => {
+        cerrarImagen();
     });
 
     // Obtener ubicación del teléfono
@@ -156,6 +168,5 @@
         });
     }
 </script>
-
 </body>
 </html>
